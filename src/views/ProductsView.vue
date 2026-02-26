@@ -54,35 +54,49 @@ onMounted(() => {
   <div class="products-page">
     <div class="container">
       <!-- 页面标题 -->
-      <div class="page-header">
+      <header class="page-header">
         <div class="header-content">
+          <div class="header-decoration">
+            <span class="decoration-line"></span>
+            <span class="decoration-text">OUR SERVICES</span>
+          </div>
           <h1 class="page-title">
-            配件与用品
-            <span class="cat-emoji">🐱</span>
+            配件与精品
+            <span class="title-paw">🐾</span>
           </h1>
-          <p class="page-subtitle">为您的猫咪提供更舒适的寄养体验</p>
+          <p class="page-subtitle">让每一位猫咪访客都能享受到家一般的温馨与高品质的呵护服务。</p>
         </div>
-      </div>
+        <div class="header-illustration">
+          <!-- 这里可以通过CSS背景图或者装饰性元素增强 -->
+          <div class="blob-bg"></div>
+          <span class="cat-silhouette">🐱</span>
+        </div>
+      </header>
 
       <!-- 分类筛选 -->
-      <div class="category-filter">
-        <button
-          class="filter-btn"
-          :class="{ active: activeCategory === null }"
-          @click="selectCategory(null)"
-        >
-          全部
-        </button>
-        <button
-          v-for="category in categories"
-          :key="category.id"
-          class="filter-btn"
-          :class="{ active: activeCategory === category.id }"
-          @click="selectCategory(category.id)"
-        >
-          {{ category.name }}
-        </button>
-      </div>
+      <nav class="category-nav">
+        <div class="filter-group">
+          <button
+            class="filter-btn"
+            :class="{ active: activeCategory === null }"
+            @click="selectCategory(null)"
+          >
+            全部服务
+          </button>
+          <button
+            v-for="category in categories"
+            :key="category.id"
+            class="filter-btn"
+            :class="{ active: activeCategory === category.id }"
+            @click="selectCategory(category.id)"
+          >
+            {{ category.name }}
+          </button>
+        </div>
+        <div class="grid-stats" v-if="!loading">
+          共找到 <span class="highlight">{{ filteredProducts.length }}</span> 项服务
+        </div>
+      </nav>
 
       <!-- 商品列表 -->
       <div v-if="loading" class="loading-state">
@@ -107,75 +121,183 @@ onMounted(() => {
 <style scoped>
 .products-page {
   min-height: 100vh;
-  background-color: var(--color-bg);
-  padding: var(--spacing-3xl) 0;
+  background-color: #fff;
+  padding: 80px 0;
+  background-image: radial-gradient(#ff6b35 0.5px, transparent 0.5px);
+  background-size: 40px 40px;
+  background-position: 0 0;
+  background-attachment: fixed;
+  background-color: #ffffff;
+  opacity: 1;
+}
+
+.products-page::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 10% 20%, rgba(255, 107, 53, 0.03) 0%, transparent 40%),
+              radial-gradient(circle at 90% 80%, rgba(255, 107, 53, 0.03) 0%, transparent 40%);
+  pointer-events: none;
 }
 
 .page-header {
-  margin-bottom: var(--spacing-2xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 64px;
+  position: relative;
 }
 
 .header-content {
-  max-width: 600px;
+  max-width: 700px;
+  z-index: 2;
+}
+
+.header-decoration {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.decoration-line {
+  width: 40px;
+  height: 2px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+.decoration-text {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--color-primary);
+  opacity: 0.8;
 }
 
 .page-title {
+  font-size: 56px;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin-bottom: 16px;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  margin-bottom: var(--spacing-sm);
+  gap: 16px;
 }
 
-.cat-emoji {
-  font-size: 0.85em;
+.title-paw {
+  font-size: 0.7em;
+  transform: rotate(15deg);
+  display: inline-block;
 }
 
 .page-subtitle {
-  font-size: var(--font-size-lg);
+  font-size: 20px;
   color: var(--color-text-secondary);
+  line-height: 1.6;
+  font-weight: 400;
+  opacity: 0.9;
 }
 
-/* 分类筛选 */
-.category-filter {
+.header-illustration {
+  position: relative;
+  width: 300px;
+  height: 200px;
   display: flex;
-  gap: var(--spacing-sm);
+  align-items: center;
+  justify-content: center;
+}
+
+.blob-bg {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  background: var(--color-primary-bg);
+  filter: blur(40px);
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  animation: blob-animate 10s ease-in-out infinite alternate;
+}
+
+.cat-silhouette {
+  font-size: 120px;
+  z-index: 1;
+  filter: drop-shadow(0 10px 20px rgba(255, 107, 53, 0.2));
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes blob-animate {
+  from { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+  to { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+/* 分类导航 */
+.category-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 48px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding-bottom: 24px;
+}
+
+.filter-group {
+  display: flex;
+  gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: var(--spacing-xl);
-  padding-bottom: var(--spacing-lg);
-  border-bottom: 1px solid var(--color-border-light);
 }
 
 .filter-btn {
-  padding: 8px 18px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-full);
-  background: var(--color-white);
+  padding: 12px 24px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-secondary);
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .filter-btn:hover {
-  border-color: var(--color-text-muted);
-  color: var(--color-text-primary);
+  background: #fff;
+  color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transform: translateY(-2px);
 }
 
 .filter-btn.active {
-  background: var(--color-text-primary);
-  border-color: var(--color-text-primary);
+  background: var(--color-primary);
   color: var(--color-white);
+  box-shadow: 0 8px 16px rgba(255, 107, 53, 0.25);
+}
+
+.grid-stats {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.grid-stats .highlight {
+  color: var(--color-text-primary);
+  font-weight: 700;
+  font-size: 1.1em;
 }
 
 /* 商品网格 */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 40px;
 }
 
 /* 状态提示 */
@@ -185,18 +307,18 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-4xl) var(--spacing-lg);
+  padding: 120px 0;
   color: var(--color-text-muted);
 }
 
 .loading-spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid var(--color-border);
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--color-primary-bg);
   border-top-color: var(--color-primary);
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-bottom: var(--spacing-md);
+  animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  margin-bottom: 24px;
 }
 
 @keyframes spin {
@@ -204,8 +326,27 @@ onMounted(() => {
 }
 
 .empty-icon {
-  font-size: 48px;
-  margin-bottom: var(--spacing-md);
-  opacity: 0.5;
+  font-size: 64px;
+  margin-bottom: 24px;
+  filter: grayscale(1);
+  opacity: 0.3;
+}
+
+@media (max-width: 1024px) {
+  .page-title { font-size: 44px; }
+  .header-illustration { display: none; }
+}
+
+@media (max-width: 768px) {
+  .category-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+  .page-title { font-size: 36px; }
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
 }
 </style>
