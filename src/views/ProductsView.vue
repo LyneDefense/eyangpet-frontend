@@ -55,38 +55,47 @@ onMounted(() => {
     <div class="container">
       <!-- 页面标题 -->
       <header class="page-header">
+        <div class="header-grid-pattern"></div>
         <div class="header-lines">
           <div class="line-h"></div>
           <div class="line-v"></div>
         </div>
         <div class="header-content">
           <div class="header-meta">
-            <span class="meta-tag">01 // PREMIUM</span>
-            <span class="meta-divider"></span>
-            <span class="meta-tag">ACTIVE_SERVICES</span>
+            <span class="meta-tag">[ LIVE_STATUS // 0xAF42 ]</span>
+            <span class="meta-pulse"></span>
+            <span class="meta-tag">CORE_ASSET_REPOSITORY</span>
           </div>
           <h1 class="main-page-title">
             配件与精品
           </h1>
-          <p class="main-page-description">
-            匠心打造高品质爱宠生活，让每一位毛孩子都能享受到科技赋能的温馨呵护。
-          </p>
+          <div class="header-sub-row">
+            <p class="main-page-description">
+              匠心打造高品质爱宠生活，让每一位毛孩子都能享受到科技赋能的温馨呵护。
+            </p>
+            <div class="coord-display">
+              <span>LOC_LAT // 31.2304</span>
+              <span>LOC_LON // 121.4737</span>
+            </div>
+          </div>
         </div>
         <div class="header-aside">
           <div class="stats-card">
-            <div class="stats-header">SYSTEM_STATS</div>
+            <div class="stats-header">DATABASE_INDEX // VERSION_4.2</div>
             <div class="stats-row">
               <div class="stats-item">
-                <span class="stats-label">COUNT</span>
+                <span class="stats-label">REG_ITEMS</span>
                 <span class="stats-value">{{ filteredProducts.length }}</span>
               </div>
               <div class="stats-item">
-                <span class="stats-label">TYPE</span>
+                <span class="stats-label">CAT_TYPE</span>
                 <span class="stats-value">{{ categories.length }}</span>
               </div>
             </div>
           </div>
         </div>
+        <div class="corner-bracket top-left"></div>
+        <div class="corner-bracket top-right"></div>
       </header>
 
       <!-- 分类筛选 -->
@@ -196,76 +205,86 @@ onMounted(() => {
   max-width: 720px;
 }
 
+.header-grid-pattern {
+  position: absolute;
+  inset: -100px;
+  background-image: radial-gradient(var(--color-border) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.3;
+  z-index: -2;
+  mask-image: linear-gradient(to bottom, black, transparent);
+}
+
 .header-meta {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   margin-bottom: 32px;
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 2px;
+  font-size: 10px;
+  letter-spacing: 1px;
   color: var(--color-text-muted);
 }
 
-.meta-divider {
-  width: 40px;
-  height: 1px;
-  background: var(--color-border);
+.meta-pulse {
+  width: 6px;
+  height: 6px;
+  background: var(--color-tech-accent);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--color-tech-accent);
 }
 
-.main-page-title {
-  font-size: 110px;
-  font-weight: 900;
-  line-height: 0.9;
-  color: var(--color-text-primary);
-  margin-bottom: 40px;
-  letter-spacing: -6px;
-  text-transform: uppercase;
+.header-sub-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
 }
 
-.main-page-description {
-  font-size: 18px;
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-  max-width: 480px;
-  font-weight: 500;
-  border-left: 2px solid var(--color-text-primary);
-  padding-left: 32px;
+.coord-display {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--color-text-muted);
+  letter-spacing: 1px;
 }
 
-.header-aside {
-  width: 280px;
+.corner-bracket {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--color-text-primary);
+  pointer-events: none;
 }
+
+.top-left { top: -20px; left: -20px; border-right: none; border-bottom: none; }
+.top-right { top: -20px; right: -20px; border-left: none; border-bottom: none; }
 
 .stats-card {
   padding: 32px;
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
+  position: relative;
+}
+
+.stats-card::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 40px;
+  height: 1px;
+  background: var(--color-tech-accent);
 }
 
 .stats-header {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 2px;
+  font-size: 9px;
+  letter-spacing: 1px;
   color: var(--color-text-muted);
   margin-bottom: 24px;
-}
-
-.stats-row {
-  display: flex;
-  gap: 40px;
-}
-
-.stats-item {
-  display: flex;
-  flex-direction: column;
-}
-
-.stats-label {
-  font-size: 10px;
-  font-weight: 800;
-  color: var(--color-text-muted);
-  margin-bottom: 4px;
 }
 
 .stats-value {
@@ -273,6 +292,7 @@ onMounted(() => {
   font-weight: 900;
   color: var(--color-text-primary);
   font-family: var(--font-mono);
+  letter-spacing: -2px;
 }
 
 /* 分类导航 - 结构化设计 */
@@ -282,7 +302,21 @@ onMounted(() => {
   align-items: center;
   margin-bottom: 80px;
   border-top: 1px solid var(--color-text-primary);
-  padding-top: 32px;
+  padding-top: 24px;
+  position: relative;
+}
+
+.category-nav::after {
+  content: "SELECT_MODULE";
+  position: absolute;
+  top: -8px;
+  right: 0;
+  background: var(--color-white);
+  padding: 0 12px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--color-text-primary);
+  font-weight: 800;
 }
 
 .filter-group {

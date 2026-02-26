@@ -21,35 +21,48 @@ const formatPrice = (price?: number, unit?: string) => {
 
 <template>
   <div class="product-card">
-    <div class="card-image">
-      <div v-if="product.images && product.images.length > 0" class="image-wrapper">
+    <div class="card-image-container">
+      <div v-if="product.images && product.images.length > 0" class="image-box">
         <img :src="product.images[0]" :alt="product.name" />
+        <div class="scanline"></div>
       </div>
-      <div v-else class="image-placeholder">
-        <div class="placeholder-text">NO_IMAGE_DATA</div>
+      <div v-else class="image-fallback">
+        <div class="fallback-code">ERR_NULL_IMG</div>
       </div>
-      <div class="card-id-tag">#{{ product.id.toString().padStart(3, '0') }}</div>
+      <div class="status-indicator">
+        <span class="status-dot"></span>
+        <span class="status-text">ACTIVE</span>
+      </div>
     </div>
-    <div class="card-body">
-      <div class="card-header">
-        <div class="product-category" v-if="product.categoryName">{{ product.categoryName }}</div>
-        <h3 class="product-title">{{ product.name }}</h3>
+    <div class="card-details">
+      <div class="detail-header">
+        <div class="tech-label">[ CAT_{{ product.categoryId }} ]</div>
+        <h3 class="product-name">{{ product.name }}</h3>
       </div>
-      <p v-if="product.description" class="product-description">
+      <p v-if="product.description" class="product-info">
         {{ product.description }}
       </p>
-      <div class="card-footer">
-        <div class="price-section">
-          <div v-if="formatPrice(product.price, product.priceUnit)" class="price-display">
-            <span class="price-amount">{{ product.price }}</span>
-            <span class="price-unit">{{ product.priceUnit ? ' / ' + product.priceUnit : '' }}</span>
+      <div class="card-specs">
+        <div class="spec-group">
+          <div class="spec-label">VAL_UNIT</div>
+          <div v-if="formatPrice(product.price, product.priceUnit)" class="spec-value">
+            <span class="currency">¥</span>
+            <span class="amount">{{ product.price }}</span>
+            <span class="unit" v-if="product.priceUnit">/{{ product.priceUnit }}</span>
           </div>
-          <div v-else class="price-inquiry">REQUEST_QUOTE</div>
+          <div v-else class="spec-value dimmed">PENDING_PRICE</div>
         </div>
-        <div class="action-tag" v-if="product.tags && product.tags.length > 0">
-          {{ getTagLabel(product.tags[0]) }}
+        <div class="spec-footer">
+          <div class="tag-box" v-if="product.tags && product.tags.length > 0">
+            {{ getTagLabel(product.tags[0]) }}
+          </div>
+          <div class="serial-no">SN_{{ product.id.toString().padStart(5, '0') }}</div>
         </div>
       </div>
+    </div>
+    <div class="corner-accents">
+      <div class="accent tl"></div>
+      <div class="accent br"></div>
     </div>
   </div>
 </template>
@@ -57,154 +70,243 @@ const formatPrice = (price?: number, unit?: string) => {
 <style scoped>
 .product-card {
   background: var(--color-white);
+  border: 1px solid var(--color-border);
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-  border: 1px solid transparent;
-  padding: 32px;
+  transition: all 0.3s ease;
+  overflow: hidden;
 }
 
 .product-card:hover {
+  border-color: var(--color-text-primary);
   background: var(--color-bg-secondary);
 }
 
-.card-image {
+.card-image-container {
   position: relative;
-  aspect-ratio: 1/1;
+  aspect-ratio: 16/9;
+  background: #000;
   overflow: hidden;
-  background: var(--color-bg-tertiary);
-  margin-bottom: 32px;
 }
 
-.image-wrapper {
+.image-box {
   width: 100%;
   height: 100%;
 }
 
-.image-wrapper img {
+.image-box img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(1);
-  transition: filter 0.6s ease;
+  filter: grayscale(1) contrast(1.1);
+  transition: all 0.5s ease;
+  opacity: 0.8;
 }
 
-.product-card:hover img {
-  filter: grayscale(0);
+.product-card:hover .image-box img {
+  filter: grayscale(0) contrast(1);
+  opacity: 1;
+  transform: scale(1.05);
 }
 
-.image-placeholder {
+.scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 10px var(--color-tech-accent);
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.product-card:hover .scanline {
+  animation: scan-move 2s linear infinite;
+  opacity: 1;
+}
+
+@keyframes scan-move {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+.image-fallback {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--color-bg-tertiary);
 }
 
-.placeholder-text {
+.fallback-code {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 2px;
+  font-size: 9px;
+  letter-spacing: 1px;
   color: var(--color-text-muted);
 }
 
-.card-id-tag {
+.status-indicator {
   position: absolute;
-  top: 16px;
-  left: 16px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--color-text-muted);
-  background: var(--color-white);
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.7);
   padding: 4px 8px;
+  z-index: 3;
 }
 
-.card-body {
+.status-dot {
+  width: 4px;
+  height: 4px;
+  background: var(--color-tech-accent);
+  border-radius: 50%;
+  box-shadow: 0 0 5px var(--color-tech-accent);
+}
+
+.status-text {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.card-details {
+  padding: 24px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-.card-header {
-  margin-bottom: 24px;
+.detail-header {
+  margin-bottom: 16px;
 }
 
-.product-category {
+.tech-label {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 2px;
+  font-size: 9px;
   color: var(--color-text-muted);
-  text-transform: uppercase;
   margin-bottom: 8px;
+  letter-spacing: 1px;
 }
 
-.product-title {
-  font-size: 28px;
+.product-name {
+  font-size: 24px;
   font-weight: 900;
-  line-height: 1.1;
   color: var(--color-text-primary);
+  line-height: 1.1;
   letter-spacing: -1px;
 }
 
-.product-description {
-  font-size: 14px;
+.product-info {
+  font-size: 13px;
   line-height: 1.6;
   color: var(--color-text-secondary);
-  margin-bottom: 40px;
+  margin-bottom: 32px;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  flex-grow: 1;
 }
 
-.card-footer {
+.card-specs {
+  margin-top: auto;
+  border-top: 1px solid var(--color-border);
+  padding-top: 20px;
+}
+
+.spec-group {
+  margin-bottom: 20px;
+}
+
+.spec-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+  letter-spacing: 1px;
+}
+
+.spec-value {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.currency {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.amount {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--color-text-primary);
+}
+
+.unit {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.dimmed {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.spec-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 24px;
-  border-top: 1px solid var(--color-border);
 }
 
-.price-display {
-  display: flex;
-  align-items: baseline;
-}
-
-.price-amount {
-  font-size: 32px;
-  font-weight: 900;
-  color: var(--color-text-primary);
+.tag-box {
   font-family: var(--font-mono);
-}
-
-.price-unit {
-  font-size: 12px;
-  color: var(--color-text-muted);
-  margin-left: 8px;
+  font-size: 9px;
   font-weight: 700;
-}
-
-.price-inquiry {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 1px;
-  color: var(--color-text-muted);
-}
-
-.action-tag {
-  font-size: 10px;
-  font-weight: 900;
   color: var(--color-text-primary);
+  background: var(--color-bg-tertiary);
+  padding: 4px 8px;
   text-transform: uppercase;
-  letter-spacing: 2px;
+}
+
+.serial-no {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--color-text-muted);
+  letter-spacing: 1px;
+}
+
+.corner-accents .accent {
+  position: absolute;
+  width: 10px;
+  height: 10px;
   border: 1px solid var(--color-text-primary);
-  padding: 6px 12px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.tl { top: 0; left: 0; border-right: none; border-bottom: none; }
+.br { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+.product-card:hover .accent {
+  opacity: 1;
 }
 
 @media (max-width: 640px) {
-  .product-card { padding: 24px; }
-  .product-title { font-size: 24px; }
+  .product-name { font-size: 20px; }
+  .amount { font-size: 24px; }
 }
 </style>

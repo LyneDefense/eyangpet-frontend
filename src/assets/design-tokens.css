@@ -15,6 +15,7 @@
   /* 科技感对比色 */
   --color-tech-navy: #020617;
   --color-tech-blue: #000000;
+  --color-tech-accent: #00F0FF; /* 电光青 - 极小范围使用增加科技感 */
   --color-tech-purple: #1E293B;
 
   /* 渐变系统 - 极简灰度渐变 */
@@ -49,8 +50,8 @@
 
   /* ============ 字体系统 - 极简科技 ============ */
 
-  --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-family: "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Space Mono", "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
 
   /* 字号 - 黄金比例 */
   --font-size-xs: 12px;
