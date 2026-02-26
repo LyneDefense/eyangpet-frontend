@@ -14,9 +14,8 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/eyangpet/api': {
-        target: 'http://localhost:9909',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/eyangpet\/api/, '/api')
+        target: 'https://enceladus.online',
+        changeOrigin: true
       }
     }
   }
