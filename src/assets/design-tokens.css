@@ -1,67 +1,44 @@
 /**
- * E养宠 设计规范 - 白色简约 + 现代互联网风 + 猫咪元素
- * =====================================================
+ * E养宠 设计规范 - Builder.io 灵感风格 (专业科技 + 极简主义)
+ * =========================================================
  */
 
 :root {
   /* ============ 颜色系统 ============ */
 
-  /* 主色 - 活力橙（品牌色） */
-  --color-primary: #FF6B35;
-  --color-primary-light: #FF8F66;
-  --color-primary-dark: #E55A2B;
-  --color-primary-bg: rgba(255, 107, 53, 0.08);
+  /* 品牌色 - Builder Blue 风格 */
+  --color-primary: #0055FF;
+  --color-primary-hover: #0044CC;
+  --color-primary-bg: rgba(0, 85, 255, 0.05);
 
-  /* 科技感对比色 */
-  --color-tech-navy: #020617;
-  --color-tech-blue: #000000;
-  --color-tech-accent: #00F0FF; /* 电光青 - 极小范围使用增加科技感 */
-  --color-tech-purple: #1E293B;
-
-  /* 渐变系统 - 极简灰度渐变 */
-  --gradient-primary: linear-gradient(to right, #000000, #475569);
-  --gradient-tech: linear-gradient(135deg, #020617 0%, #1E293B 100%);
-  --gradient-surface: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
-  --gradient-accent: linear-gradient(to right, #000000, #0F172A);
-
-  /* 辅助色 */
-  --color-secondary: #6C584C;      /* 猫咪棕 - 用于图标、点缀 */
-  --color-secondary-light: #A98467;
-
-  /* 功能色 */
-  --color-success: #22C55E;
-  --color-warning: #F59E0B;
-  --color-error: #EF4444;
-  --color-info: #3B82F6;
-
-  /* 中性色 - 高级极简白 */
+  /* 中性色 - 专业灰阶 */
+  --color-black: #111111;
   --color-white: #FFFFFF;
   --color-bg: #FFFFFF;
-  --color-bg-secondary: #F8FAFC;
-  --color-bg-tertiary: #F1F5F9;
-  --color-border: #E2E8F0;
-  --color-border-light: #F1F5F9;
+  --color-bg-alt: #F9FAFB;
+  --color-border: #E5E7EB;
+  --color-border-hover: #D1D5DB;
 
-  /* 文字色 - 高对比 */
-  --color-text-primary: #020617;
-  --color-text-secondary: #475569;
-  --color-text-muted: #94A3B8;
-  --color-text-inverse: #FFFFFF;
+  /* 文字色 */
+  --color-text-primary: #111111;
+  --color-text-secondary: #4B5563;
+  --color-text-tertiary: #9CA3AF;
 
-  /* ============ 字体系统 - 极简科技 ============ */
+  /* ============ 字体系统 ============ */
 
-  --font-family: "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "Space Mono", "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
-
-  /* 字号 - 黄金比例 */
+  /* 采用专业 SaaS 标配 Inter 字体 */
+  --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  
+  /* 字号 */
   --font-size-xs: 12px;
   --font-size-sm: 14px;
-  --font-size-base: 15px;
-  --font-size-lg: 17px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
   --font-size-xl: 20px;
   --font-size-2xl: 24px;
-  --font-size-3xl: 32px;
-  --font-size-4xl: 40px;
+  --font-size-3xl: 30px;
+  --font-size-4xl: 36px;
+  --font-size-hero: 48px;
 
   /* 字重 */
   --font-weight-normal: 400;
@@ -69,13 +46,8 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  /* 行高 */
-  --line-height-tight: 1.25;
-  --line-height-normal: 1.5;
-  --line-height-relaxed: 1.75;
-
   /* ============ 间距系统 ============ */
-
+  --spacing-unit: 4px;
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
@@ -83,37 +55,21 @@
   --spacing-xl: 32px;
   --spacing-2xl: 48px;
   --spacing-3xl: 64px;
-  --spacing-4xl: 96px;
 
-  /* ============ 圆角 - 现代感 ============ */
-
+  /* ============ 圆角 ============ */
   --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-2xl: 24px;
-  --radius-full: 9999px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
 
-  /* ============ 阴影 - 轻盈现代 ============ */
-
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
-
-  /* 卡片阴影 */
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05);
-  --shadow-card-hover: 0 10px 20px rgba(0, 0, 0, 0.08);
+  /* ============ 阴影 - Builder 风格的多层柔和阴影 ============ */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.05), 0 12px 24px rgba(0, 0, 0, 0.05);
+  --shadow-card-hover: 0 0 0 1px rgba(0, 85, 255, 0.1), 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 
   /* ============ 动画 ============ */
-
-  --transition-fast: 150ms ease;
-  --transition-normal: 200ms ease;
-  --transition-slow: 300ms ease;
-
-  /* ============ 布局 ============ */
-
-  --container-max-width: 1200px;
-  --header-height: 64px;
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }

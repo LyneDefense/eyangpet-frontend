@@ -52,93 +52,67 @@ onMounted(() => {
 
 <template>
   <div class="products-page">
-    <div class="container">
-      <!-- 页面标题 -->
+    <div class="main-container">
+      <!-- 页面头部 - Builder 风格 -->
       <header class="page-header">
-        <div class="header-grid-pattern"></div>
-        <div class="header-lines">
-          <div class="line-h"></div>
-          <div class="line-v"></div>
-        </div>
         <div class="header-content">
-          <div class="header-meta">
-            <span class="meta-tag">[ LIVE_STATUS // 0xAF42 ]</span>
-            <span class="meta-pulse"></span>
-            <span class="meta-tag">CORE_ASSET_REPOSITORY</span>
-          </div>
-          <h1 class="main-page-title">
-            配件与精品
-          </h1>
-          <div class="header-sub-row">
-            <p class="main-page-description">
-              匠心打造高品质爱宠生活，让每一位毛孩子都能享受到科技赋能的温馨呵护。
-            </p>
-            <div class="coord-display">
-              <span>LOC_LAT // 31.2304</span>
-              <span>LOC_LON // 121.4737</span>
-            </div>
+          <h1 class="page-title">配件与精品</h1>
+          <p class="page-description">匠心打造高品质爱宠生活，让每一位毛孩子都能享受到专业赋能的温馨呵护。</p>
+        </div>
+        <div class="header-actions" v-if="!loading">
+          <div class="items-counter">
+            <span class="count">{{ filteredProducts.length }}</span>
+            <span class="label">项产品</span>
           </div>
         </div>
-        <div class="header-aside">
-          <div class="stats-card">
-            <div class="stats-header">DATABASE_INDEX // VERSION_4.2</div>
-            <div class="stats-row">
-              <div class="stats-item">
-                <span class="stats-label">REG_ITEMS</span>
-                <span class="stats-value">{{ filteredProducts.length }}</span>
-              </div>
-              <div class="stats-item">
-                <span class="stats-label">CAT_TYPE</span>
-                <span class="stats-value">{{ categories.length }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="corner-bracket top-left"></div>
-        <div class="corner-bracket top-right"></div>
       </header>
 
-      <!-- 分类筛选 -->
-      <nav class="category-nav">
-        <div class="filter-group">
+      <!-- 分类筛选 - 标签页风格 -->
+      <nav class="category-tabs-container">
+        <div class="category-tabs">
           <button
-            class="filter-btn"
+            class="tab-btn"
             :class="{ active: activeCategory === null }"
             @click="selectCategory(null)"
           >
-            全部服务
+            全部
           </button>
           <button
             v-for="category in categories"
             :key="category.id"
-            class="filter-btn"
+            class="tab-btn"
             :class="{ active: activeCategory === category.id }"
             @click="selectCategory(category.id)"
           >
             {{ category.name }}
           </button>
         </div>
-        <div class="grid-stats" v-if="!loading">
-          共找到 <span class="highlight">{{ filteredProducts.length }}</span> 项服务
-        </div>
       </nav>
 
-      <!-- 商品列表 -->
-      <div v-if="loading" class="loading-state">
-        <div class="loading-spinner"></div>
-        <span>加载中...</span>
-      </div>
-      <div v-else-if="filteredProducts.length === 0" class="empty-state">
-        <div class="empty-icon">🐾</div>
-        <p>暂无商品</p>
-      </div>
-      <div v-else class="products-grid">
-        <ProductCard
-          v-for="product in filteredProducts"
-          :key="product.id"
-          :product="product"
-        />
-      </div>
+      <!-- 内容区域 -->
+      <main class="content-area">
+        <div v-if="loading" class="loading-state">
+          <div class="loading-bar-container">
+            <div class="loading-bar"></div>
+          </div>
+          <span class="loading-text">正在同步数据...</span>
+        </div>
+
+        <div v-else-if="filteredProducts.length === 0" class="empty-state">
+          <div class="empty-message">
+            <h3>暂无相关产品</h3>
+            <p>我们正在不断更新我们的收藏，请稍后再来。</p>
+          </div>
+        </div>
+
+        <div v-else class="products-grid">
+          <ProductCard
+            v-for="product in filteredProducts"
+            :key="product.id"
+            :product="product"
+          />
+        </div>
+      </main>
     </div>
   </div>
 </template>
@@ -147,267 +121,211 @@ onMounted(() => {
 .products-page {
   min-height: 100vh;
   background-color: var(--color-white);
-  padding: 140px 0;
-  position: relative;
-  overflow-x: hidden;
+  color: var(--color-text-primary);
   font-family: var(--font-family);
+  padding: 80px 0;
   -webkit-font-smoothing: antialiased;
 }
 
-.products-page::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: var(--color-border);
-  z-index: 10;
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
 }
 
+/* 页面头部 */
 .page-header {
+  margin-bottom: var(--spacing-3xl);
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 120px;
-  position: relative;
-}
-
-.header-lines {
-  position: absolute;
-  top: -140px;
-  left: 0;
-  width: 100%;
-  height: 400px;
-  pointer-events: none;
-  z-index: -1;
-}
-
-.line-h {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(to right, var(--color-border), transparent);
-}
-
-.line-v {
-  position: absolute;
-  top: -140px;
-  left: 10%;
-  width: 1px;
-  height: 600px;
-  background: linear-gradient(to bottom, var(--color-border), transparent);
 }
 
 .header-content {
-  max-width: 720px;
+  max-width: 600px;
 }
 
-.header-grid-pattern {
-  position: absolute;
-  inset: -100px;
-  background-image: radial-gradient(var(--color-border) 1px, transparent 1px);
-  background-size: 32px 32px;
-  opacity: 0.3;
-  z-index: -2;
-  mask-image: linear-gradient(to bottom, black, transparent);
+.page-title {
+  font-size: var(--font-size-hero);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-black);
 }
 
-.header-meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 32px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 1px;
-  color: var(--color-text-muted);
+.page-description {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  font-weight: var(--font-weight-normal);
 }
 
-.meta-pulse {
-  width: 6px;
-  height: 6px;
-  background: var(--color-tech-accent);
-  border-radius: 50%;
-  box-shadow: 0 0 10px var(--color-tech-accent);
-}
-
-.header-sub-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 40px;
-}
-
-.coord-display {
+.items-counter {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--color-text-muted);
-  letter-spacing: 1px;
+  align-items: flex-end;
+  font-variant-numeric: tabular-nums;
 }
 
-.corner-bracket {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border: 1px solid var(--color-text-primary);
-  pointer-events: none;
+.items-counter .count {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-black);
 }
 
-.top-left { top: -20px; left: -20px; border-right: none; border-bottom: none; }
-.top-right { top: -20px; right: -20px; border-left: none; border-bottom: none; }
-
-.stats-card {
-  padding: 32px;
-  background: var(--color-bg-secondary);
-  border: 1px solid var(--color-border);
-  position: relative;
+.items-counter .label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
-.stats-card::before {
-  content: "";
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  width: 40px;
-  height: 1px;
-  background: var(--color-tech-accent);
+/* 分类标签页 */
+.category-tabs-container {
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--spacing-2xl);
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
 }
 
-.stats-header {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 1px;
-  color: var(--color-text-muted);
-  margin-bottom: 24px;
+.category-tabs-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
 
-.stats-value {
-  font-size: 32px;
-  font-weight: 900;
-  color: var(--color-text-primary);
-  font-family: var(--font-mono);
-  letter-spacing: -2px;
-}
-
-/* 分类导航 - 结构化设计 */
-.category-nav {
+.category-tabs {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 80px;
-  border-top: 1px solid var(--color-text-primary);
-  padding-top: 24px;
-  position: relative;
+  gap: var(--spacing-xl);
+  padding-bottom: 1px;
 }
 
-.category-nav::after {
-  content: "SELECT_MODULE";
-  position: absolute;
-  top: -8px;
-  right: 0;
-  background: var(--color-white);
-  padding: 0 12px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--color-text-primary);
-  font-weight: 800;
-}
-
-.filter-group {
-  display: flex;
-  gap: 48px;
-}
-
-.filter-btn {
+.tab-btn {
   background: none;
   border: none;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  color: var(--color-text-muted);
+  padding: var(--spacing-md) 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
   cursor: pointer;
-  padding: 8px 0;
   position: relative;
-  text-transform: uppercase;
-  transition: color 0.3s ease;
+  white-space: nowrap;
+  transition: color var(--transition-fast);
 }
 
-.filter-btn:hover {
-  color: var(--color-text-primary);
+.tab-btn:hover {
+  color: var(--color-black);
 }
 
-.filter-btn::after {
-  content: "";
+.tab-btn.active {
+  color: var(--color-primary);
+}
+
+.tab-btn.active::after {
+  content: '';
   position: absolute;
-  bottom: 0;
+  bottom: -1px;
   left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--color-text-primary);
-  transition: width 0.3s ease;
-}
-
-.filter-btn.active {
-  color: var(--color-text-primary);
-}
-
-.filter-btn.active::after {
   width: 100%;
+  height: 2px;
+  background-color: var(--color-primary);
 }
 
-/* 商品网格 */
+/* 内容区域 */
+.content-area {
+  min-height: 400px;
+}
+
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-  gap: 1px;
-  background: var(--color-border);
-  border: 1px solid var(--color-border);
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: var(--spacing-xl);
 }
 
-/* 状态提示 */
-.loading-state,
-.empty-state {
+/* 状态样式 */
+.loading-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 200px 0;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 4px;
-  color: var(--color-text-muted);
+  padding: 100px 0;
 }
 
-.loading-spinner {
-  width: 2px;
-  height: 60px;
-  background: var(--color-text-primary);
-  animation: loading-line 1.5s infinite ease-in-out;
-  margin-bottom: 40px;
+.loading-bar-container {
+  width: 200px;
+  height: 2px;
+  background-color: var(--color-bg-alt);
+  border-radius: 1px;
+  margin-bottom: var(--spacing-md);
+  overflow: hidden;
 }
 
-@keyframes loading-line {
-  0% { transform: scaleY(0); transform-origin: top; }
-  50% { transform: scaleY(1); transform-origin: top; }
-  50.1% { transform: scaleY(1); transform-origin: bottom; }
-  100% { transform: scaleY(0); transform-origin: bottom; }
+.loading-bar {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-primary);
+  animation: loading-slide 1.5s infinite ease-in-out;
+  transform-origin: left;
 }
 
-@media (max-width: 1200px) {
-  .main-page-title { font-size: 80px; }
-  .header-aside { display: none; }
+@keyframes loading-slide {
+  0% { transform: scaleX(0); }
+  50% { transform: scaleX(0.7); transform-origin: left; }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+
+.loading-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-weight-medium);
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 0;
+  text-align: center;
+}
+
+.empty-message h3 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-black);
+}
+
+.empty-message p {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
 }
 
 @media (max-width: 768px) {
-  .products-page { padding: 100px 0; }
-  .main-page-title { font-size: 60px; letter-spacing: -3px; }
-  .filter-group { gap: 24px; flex-wrap: wrap; }
-  .products-grid { grid-template-columns: 1fr; }
+  .products-page {
+    padding: 40px 0;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-lg);
+  }
+  
+  .page-title {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .items-counter {
+    align-items: flex-start;
+  }
+  
+  .category-tabs {
+    gap: var(--spacing-lg);
+  }
+  
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
 }
 </style>

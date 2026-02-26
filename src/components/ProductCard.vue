@@ -21,74 +21,79 @@ const formatPrice = (price?: number, unit?: string) => {
 
 <template>
   <div class="product-card">
-    <div class="card-image-container">
+    <div class="card-image-area">
       <div v-if="product.images && product.images.length > 0" class="image-box">
-        <img :src="product.images[0]" :alt="product.name" />
-        <div class="scanline"></div>
+        <img :src="product.images[0]" :alt="product.name" loading="lazy" />
       </div>
-      <div v-else class="image-fallback">
-        <div class="fallback-code">ERR_NULL_IMG</div>
+      <div v-else class="image-placeholder">
+        <div class="placeholder-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </div>
       </div>
-      <div class="status-indicator">
-        <span class="status-dot"></span>
-        <span class="status-text">ACTIVE</span>
-      </div>
+      <div v-if="product.isActive" class="card-badge">热销</div>
     </div>
-    <div class="card-details">
-      <div class="detail-header">
-        <div class="tech-label">[ CAT_{{ product.categoryId }} ]</div>
+    
+    <div class="card-info">
+      <div class="card-main-header">
+        <div class="category-text" v-if="product.categoryName">{{ product.categoryName }}</div>
         <h3 class="product-name">{{ product.name }}</h3>
       </div>
-      <p v-if="product.description" class="product-info">
+      
+      <p v-if="product.description" class="product-desc">
         {{ product.description }}
       </p>
-      <div class="card-specs">
-        <div class="spec-group">
-          <div class="spec-label">VAL_UNIT</div>
-          <div v-if="formatPrice(product.price, product.priceUnit)" class="spec-value">
-            <span class="currency">¥</span>
+      
+      <div class="card-footer">
+        <div class="price-box">
+          <div v-if="formatPrice(product.price, product.priceUnit)" class="price-display">
+            <span class="currency-symbol">¥</span>
             <span class="amount">{{ product.price }}</span>
             <span class="unit" v-if="product.priceUnit">/{{ product.priceUnit }}</span>
           </div>
-          <div v-else class="spec-value dimmed">PENDING_PRICE</div>
+          <div v-else class="price-placeholder">咨询客服</div>
         </div>
-        <div class="spec-footer">
-          <div class="tag-box" v-if="product.tags && product.tags.length > 0">
+        
+        <div class="tags-row" v-if="product.tags && product.tags.length > 0">
+          <span class="tag-pill">
             {{ getTagLabel(product.tags[0]) }}
-          </div>
-          <div class="serial-no">SN_{{ product.id.toString().padStart(5, '0') }}</div>
+          </span>
         </div>
       </div>
-    </div>
-    <div class="corner-accents">
-      <div class="accent tl"></div>
-      <div class="accent br"></div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .product-card {
-  background: var(--color-white);
-  border: 1px solid var(--color-border);
-  position: relative;
+  background-color: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: all 0.3s ease;
-  overflow: hidden;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  position: relative;
 }
 
 .product-card:hover {
-  border-color: var(--color-text-primary);
-  background: var(--color-bg-secondary);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--color-primary);
 }
 
-.card-image-container {
+.card-image-area {
   position: relative;
-  aspect-ratio: 16/9;
-  background: #000;
+  aspect-ratio: 16/10;
+  background-color: var(--color-bg-alt);
   overflow: hidden;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .image-box {
@@ -100,213 +105,131 @@ const formatPrice = (price?: number, unit?: string) => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.1);
-  transition: all 0.5s ease;
-  opacity: 0.8;
+  transition: transform var(--transition-base);
 }
 
 .product-card:hover .image-box img {
-  filter: grayscale(0) contrast(1);
-  opacity: 1;
   transform: scale(1.05);
 }
 
-.scanline {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: rgba(0, 240, 255, 0.2);
-  box-shadow: 0 0 10px var(--color-tech-accent);
-  z-index: 2;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.product-card:hover .scanline {
-  animation: scan-move 2s linear infinite;
-  opacity: 1;
-}
-
-@keyframes scan-move {
-  0% { top: 0; }
-  100% { top: 100%; }
-}
-
-.image-fallback {
+.image-placeholder {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg-tertiary);
+  color: var(--color-text-tertiary);
 }
 
-.fallback-code {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 1px;
-  color: var(--color-text-muted);
-}
-
-.status-indicator {
+.card-badge {
   position: absolute;
   top: 12px;
   right: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 4px 8px;
-  z-index: 3;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-.status-dot {
-  width: 4px;
-  height: 4px;
-  background: var(--color-tech-accent);
-  border-radius: 50%;
-  box-shadow: 0 0 5px var(--color-tech-accent);
-}
-
-.status-text {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  color: #fff;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
-.card-details {
-  padding: 24px;
+.card-info {
+  padding: var(--spacing-xl);
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-.detail-header {
-  margin-bottom: 16px;
+.card-main-header {
+  margin-bottom: var(--spacing-md);
 }
 
-.tech-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--color-text-muted);
-  margin-bottom: 8px;
-  letter-spacing: 1px;
+.category-text {
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--spacing-xs);
 }
 
 .product-name {
-  font-size: 24px;
-  font-weight: 900;
-  color: var(--color-text-primary);
-  line-height: 1.1;
-  letter-spacing: -1px;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
-.product-info {
-  font-size: 13px;
-  line-height: 1.6;
+.product-desc {
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
-  margin-bottom: 32px;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-xl);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  height: 3.2em; /* 保持一致的高度 */
 }
 
-.card-specs {
+.card-footer {
   margin-top: auto;
-  border-top: 1px solid var(--color-border);
-  padding-top: 20px;
-}
-
-.spec-group {
-  margin-bottom: 20px;
-}
-
-.spec-label {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  color: var(--color-text-muted);
-  margin-bottom: 4px;
-  letter-spacing: 1px;
-}
-
-.spec-value {
-  display: flex;
-  align-items: baseline;
-  gap: 2px;
-}
-
-.currency {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--color-text-primary);
-}
-
-.amount {
-  font-family: var(--font-mono);
-  font-size: 28px;
-  font-weight: 900;
-  color: var(--color-text-primary);
-}
-
-.unit {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--color-text-muted);
-}
-
-.dimmed {
-  color: var(--color-text-muted);
-  font-family: var(--font-mono);
-  font-size: 12px;
-}
-
-.spec-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.tag-box {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--color-text-primary);
-  background: var(--color-bg-tertiary);
-  padding: 4px 8px;
-  text-transform: uppercase;
+.price-display {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
 }
 
-.serial-no {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  color: var(--color-text-muted);
-  letter-spacing: 1px;
+.currency-symbol {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-black);
 }
 
-.corner-accents .accent {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border: 1px solid var(--color-text-primary);
-  opacity: 0;
-  transition: all 0.3s ease;
+.amount {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  letter-spacing: -0.02em;
 }
 
-.tl { top: 0; left: 0; border-right: none; border-bottom: none; }
-.br { bottom: 0; right: 0; border-left: none; border-top: none; }
+.unit {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  margin-left: 2px;
+}
 
-.product-card:hover .accent {
-  opacity: 1;
+.price-placeholder {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-weight-medium);
+}
+
+.tag-pill {
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-alt);
+  padding: 4px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
 }
 
 @media (max-width: 640px) {
-  .product-name { font-size: 20px; }
-  .amount { font-size: 24px; }
+  .product-name {
+    font-size: var(--font-size-lg);
+  }
+  
+  .amount {
+    font-size: var(--font-size-xl);
+  }
 }
 </style>
