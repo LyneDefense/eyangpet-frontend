@@ -52,17 +52,31 @@ onMounted(() => {
 
 <template>
   <div class="products-page">
+    <!-- 背景装饰 -->
+    <div class="bg-decorations">
+      <div class="glow-orb orb-1"></div>
+      <div class="glow-orb orb-2"></div>
+      <div class="grid-overlay"></div>
+    </div>
+
     <div class="main-container">
-      <!-- 页面头部 - Builder 风格 -->
+      <!-- 页面头部 -->
       <header class="page-header">
         <div class="header-content">
+          <div class="header-pill">
+            <span class="pill-dot"></span>
+            <span class="pill-text">E-PET COLLECTIONS</span>
+          </div>
           <h1 class="page-title">配件与精品</h1>
           <p class="page-description">匠心打造高品质爱宠生活，让每一位毛孩子都能享受到专业赋能的温馨呵护。</p>
         </div>
-        <div class="header-actions" v-if="!loading">
-          <div class="items-counter">
-            <span class="count">{{ filteredProducts.length }}</span>
-            <span class="label">项产品</span>
+        <div class="header-status" v-if="!loading">
+          <div class="status-card">
+            <div class="status-label">当前库存</div>
+            <div class="status-value">
+              <span class="number">{{ filteredProducts.length }}</span>
+              <span class="unit">SKUs</span>
+            </div>
           </div>
         </div>
       </header>
@@ -123,98 +137,186 @@ onMounted(() => {
   background-color: var(--color-white);
   color: var(--color-text-primary);
   font-family: var(--font-family);
-  padding: 80px 0;
+  padding: 100px 0;
+  position: relative;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+/* 背景装饰 */
+.bg-decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+}
+
+.orb-1 {
+  width: 500px;
+  height: 500px;
+  background: var(--color-primary);
+  top: -200px;
+  right: -100px;
+}
+
+.orb-2 {
+  width: 400px;
+  height: 400px;
+  background: var(--color-secondary);
+  top: 20%;
+  left: -150px;
+}
+
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(var(--color-border-strong) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
 }
 
 .main-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
+  position: relative;
+  z-index: 1;
 }
 
 /* 页面头部 */
 .page-header {
-  margin-bottom: var(--spacing-3xl);
+  margin-bottom: 80px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .header-content {
-  max-width: 600px;
+  max-width: 640px;
+}
+
+.header-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: var(--color-primary-bg);
+  border-radius: 100px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(0, 85, 255, 0.1);
+}
+
+.pill-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.pill-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.1em;
 }
 
 .page-title {
-  font-size: var(--font-size-hero);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  margin-bottom: var(--spacing-md);
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 24px;
   color: var(--color-black);
 }
 
 .page-description {
-  font-size: var(--font-size-lg);
+  font-size: 18px;
   color: var(--color-text-secondary);
-  line-height: 1.5;
-  font-weight: var(--font-weight-normal);
+  line-height: 1.6;
+  font-weight: 450;
 }
 
-.items-counter {
+.status-card {
+  padding: 24px 32px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.status-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-value {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  font-variant-numeric: tabular-nums;
+  align-items: baseline;
+  gap: 6px;
 }
 
-.items-counter .count {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-semibold);
+.status-value .number {
+  font-size: 32px;
+  font-weight: 800;
   color: var(--color-black);
 }
 
-.items-counter .label {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
+.status-value .unit {
+  font-size: 14px;
+  font-weight: 600;
   color: var(--color-text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
 }
 
 /* 分类标签页 */
 .category-tabs-container {
+  margin-bottom: 64px;
   border-bottom: 1px solid var(--color-border);
-  margin-bottom: var(--spacing-2xl);
-  overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-}
-
-.category-tabs-container::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+  position: relative;
 }
 
 .category-tabs {
   display: flex;
-  gap: var(--spacing-xl);
-  padding-bottom: 1px;
+  gap: 40px;
 }
 
 .tab-btn {
   background: none;
   border: none;
-  padding: var(--spacing-md) 0;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
+  padding: 20px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
   cursor: pointer;
   position: relative;
-  white-space: nowrap;
-  transition: color var(--transition-fast);
+  transition: all 0.3s ease;
 }
 
 .tab-btn:hover {
-  color: var(--color-black);
+  color: var(--color-text-primary);
 }
 
 .tab-btn.active {
@@ -228,7 +330,8 @@ onMounted(() => {
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: var(--color-primary);
+  background: var(--color-primary);
+  box-shadow: 0 0 10px rgba(0, 85, 255, 0.3);
 }
 
 /* 内容区域 */
@@ -239,7 +342,7 @@ onMounted(() => {
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: var(--spacing-xl);
+  gap: 32px;
 }
 
 /* 状态样式 */
@@ -254,7 +357,7 @@ onMounted(() => {
 .loading-bar-container {
   width: 200px;
   height: 2px;
-  background-color: var(--color-bg-alt);
+  background-color: var(--color-bg-subtle);
   border-radius: 1px;
   margin-bottom: var(--spacing-md);
   overflow: hidden;

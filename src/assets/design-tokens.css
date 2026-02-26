@@ -9,20 +9,25 @@
   /* 品牌色 - Builder Blue 风格 */
   --color-primary: #0055FF;
   --color-primary-hover: #0044CC;
-  --color-primary-bg: rgba(0, 85, 255, 0.05);
+  --color-primary-bg: rgba(0, 85, 255, 0.04);
+  --color-secondary: #6366F1; /* Indigo accent for richness */
 
   /* 中性色 - 专业灰阶 */
-  --color-black: #111111;
+  --color-black: #0F172A; /* Deeper slate for contrast */
   --color-white: #FFFFFF;
   --color-bg: #FFFFFF;
-  --color-bg-alt: #F9FAFB;
-  --color-border: #E5E7EB;
-  --color-border-hover: #D1D5DB;
+  --color-bg-subtle: #F8FAFC; /* Softer gray background */
+  --color-border: #F1F5F9; /* Very light border */
+  --color-border-strong: #E2E8F0;
+
+  /* 渐变系统 */
+  --gradient-main: linear-gradient(135deg, #0055FF 0%, #6366F1 100%);
+  --gradient-bg: radial-gradient(circle at 50% 0%, rgba(0, 85, 255, 0.03) 0%, transparent 70%);
 
   /* 文字色 */
-  --color-text-primary: #111111;
-  --color-text-secondary: #4B5563;
-  --color-text-tertiary: #9CA3AF;
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94A3B8;
 
   /* ============ 字体系统 ============ */
 
