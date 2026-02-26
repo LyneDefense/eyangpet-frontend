@@ -21,6 +21,7 @@ const formatPrice = (price?: number, unit?: string) => {
 
 <template>
   <div class="product-card">
+    <div class="card-tech-id">REF:{{ product.id.toString().padStart(4, '0') }}</div>
     <div class="card-image">
       <div v-if="product.images && product.images.length > 0" class="image-wrapper">
         <img :src="product.images[0]" :alt="product.name" />
@@ -28,64 +29,92 @@ const formatPrice = (price?: number, unit?: string) => {
       <div v-else class="image-placeholder">
         <div class="placeholder-content">
           <span class="placeholder-icon">🐱</span>
-          <span class="placeholder-text">E养宠 · 贴心守护</span>
+          <span class="placeholder-text">SYSTEM ACTIVE</span>
         </div>
       </div>
-      <div class="card-badge" v-if="product.isActive">热销中</div>
+      <div class="card-badge" v-if="product.isActive">AVAILABLE</div>
     </div>
     <div class="card-content">
       <div class="card-header-info">
+        <div class="category-pill" v-if="product.categoryName">{{ product.categoryName }}</div>
         <h3 class="card-title">{{ product.name }}</h3>
-        <div class="card-category" v-if="product.categoryName">{{ product.categoryName }}</div>
       </div>
       <p v-if="product.description" class="card-desc">
         {{ product.description }}
       </p>
-      <div class="card-action-area">
-        <div v-if="formatPrice(product.price, product.priceUnit)" class="card-price">
-          <span class="price-symbol">¥</span>
-          <span class="price-value">{{ product.price }}</span>
-          <span class="price-unit" v-if="product.priceUnit">/{{ product.priceUnit }}</span>
+      <div class="card-footer">
+        <div v-if="formatPrice(product.price, product.priceUnit)" class="card-price-row">
+          <span class="price-val">{{ product.price }}</span>
+          <span class="price-cur">RMB</span>
+          <span class="price-unt" v-if="product.priceUnit">/{{ product.priceUnit }}</span>
         </div>
-        <div v-else class="card-price-placeholder">咨询客服</div>
+        <div v-else class="price-placeholder">CONTACT SERVICE</div>
 
         <div class="card-tags" v-if="product.tags && product.tags.length > 0">
           <span
-            v-for="tag in product.tags.slice(0, 2)"
+            v-for="tag in product.tags.slice(0, 1)"
             :key="tag"
-            class="tag-pill"
-            :class="{ 'tag-accent': tag === 'meituan' }"
+            class="tag-tech"
+            :class="{ 'tag-highlight': tag === 'meituan' }"
           >
             {{ getTagLabel(tag) }}
           </span>
         </div>
       </div>
     </div>
+    <div class="card-hover-border"></div>
   </div>
 </template>
 
 <style scoped>
 .product-card {
-  background: var(--color-white);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border-light);
+  background: #fff;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
   overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
   display: flex;
   flex-direction: column;
   position: relative;
   height: 100%;
+  cursor: pointer;
+}
+
+.card-tech-id {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--color-text-muted);
+  z-index: 2;
+  letter-spacing: 1px;
 }
 
 .product-card:hover {
-  transform: translateY(-12px);
-  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.12);
-  border-color: rgba(255, 107, 53, 0.2);
+  transform: translateY(-16px) scale(1.02);
+  box-shadow: 0 40px 80px rgba(15, 23, 42, 0.15);
+  border-color: transparent;
+}
+
+.card-hover-border {
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  border-radius: var(--radius-xl);
+  pointer-events: none;
+  transition: all 0.6s ease;
+  z-index: 5;
+}
+
+.product-card:hover .card-hover-border {
+  border-color: var(--color-primary);
+  mask-image: linear-gradient(135deg, black, transparent);
 }
 
 .card-image {
   position: relative;
-  aspect-ratio: 16/10;
+  aspect-ratio: 1/1;
   overflow: hidden;
   background: var(--color-bg-secondary);
 }
@@ -99,11 +128,11 @@ const formatPrice = (price?: number, unit?: string) => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .product-card:hover .image-wrapper img {
-  transform: scale(1.08);
+  transform: scale(1.15);
 }
 
 .image-placeholder {
@@ -113,176 +142,137 @@ const formatPrice = (price?: number, unit?: string) => {
   align-items: center;
   justify-content: center;
   background: var(--gradient-surface);
-  position: relative;
-}
-
-.image-placeholder::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, var(--color-primary) 0.5px, transparent 0.5px);
-  background-size: 15px 15px;
-  opacity: 0.05;
-}
-
-.placeholder-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-sm);
-  z-index: 1;
 }
 
 .placeholder-icon {
-  font-size: 56px;
-  filter: drop-shadow(0 10px 15px rgba(255, 107, 53, 0.2));
+  font-size: 64px;
+  filter: grayscale(1);
+  opacity: 0.2;
 }
 
 .placeholder-text {
-  font-size: 11px;
-  color: var(--color-primary);
-  font-weight: 800;
+  position: absolute;
+  bottom: 20px;
+  font-size: 10px;
+  font-weight: 900;
   letter-spacing: 2px;
-  text-transform: uppercase;
+  color: var(--color-text-muted);
 }
 
 .card-badge {
   position: absolute;
-  top: 16px;
+  bottom: 16px;
   right: 16px;
   background: var(--color-tech-navy);
-  color: var(--color-white);
-  padding: 6px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 11px;
-  font-weight: 700;
+  color: #fff;
+  padding: 6px 12px;
+  font-size: 10px;
+  font-weight: 800;
   letter-spacing: 1px;
-  z-index: 1;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+  z-index: 2;
 }
 
 .card-content {
-  padding: 28px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  position: relative;
 }
 
 .card-header-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12px;
-  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.category-pill {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
 }
 
 .card-title {
-  font-size: 22px;
-  font-weight: 800;
+  font-size: 24px;
+  font-weight: 900;
   color: var(--color-tech-navy);
   line-height: 1.2;
-  flex-grow: 1;
-  letter-spacing: -0.5px;
-}
-
-.card-category {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--color-text-muted);
-  background: var(--color-bg-secondary);
-  padding: 4px 10px;
-  border-radius: 4px;
-  white-space: nowrap;
-  letter-spacing: 0.5px;
+  letter-spacing: -1px;
 }
 
 .card-desc {
   font-size: 15px;
   color: var(--color-text-secondary);
-  margin-bottom: 32px;
   line-height: 1.6;
+  margin-bottom: 40px;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  height: 3.2em;
+  flex-grow: 1;
 }
 
-.card-action-area {
-  margin-top: auto;
+.card-footer {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding-top: 20px;
-  border-top: 1px solid var(--color-bg-secondary);
+  align-items: flex-end;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border-light);
 }
 
-.card-price {
-  color: var(--color-primary);
+.card-price-row {
   display: flex;
   align-items: baseline;
 }
 
-.price-symbol {
-  font-size: 14px;
-  font-weight: 700;
-  margin-right: 2px;
-}
-
-.price-value {
-  font-size: 32px;
-  font-weight: 800;
+.price-val {
+  font-size: 40px;
+  font-weight: 900;
+  color: var(--color-tech-navy);
   line-height: 1;
 }
 
-.price-unit {
-  font-size: 13px;
+.price-cur {
+  font-size: 12px;
+  font-weight: 800;
   color: var(--color-text-muted);
-  margin-left: 4px;
-  font-weight: 500;
+  margin-left: 8px;
 }
 
-.card-price-placeholder {
-  font-size: 15px;
+.price-unt {
+  font-size: 14px;
   color: var(--color-text-muted);
-  font-weight: 600;
+  margin-left: 4px;
+}
+
+.price-placeholder {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-muted);
 }
 
 .card-tags {
   display: flex;
-  gap: 8px;
 }
 
-.tag-pill {
-  padding: 5px 12px;
-  font-size: 11px;
-  font-weight: 700;
-  border-radius: 4px;
-  background: var(--color-bg-secondary);
+.tag-tech {
+  font-size: 10px;
+  font-weight: 800;
   color: var(--color-tech-navy);
-  border: 1px solid transparent;
-  transition: all 0.3s ease;
+  padding: 6px 14px;
+  background: var(--color-bg-secondary);
+  border-radius: 4px;
+  letter-spacing: 0.5px;
 }
 
-.product-card:hover .tag-pill {
-  border-color: var(--color-border);
-}
-
-.tag-accent {
+.tag-highlight {
   background: var(--color-primary-bg);
   color: var(--color-primary);
 }
 
 @media (max-width: 640px) {
-  .card-content {
-    padding: 20px;
-  }
-  .card-title {
-    font-size: 18px;
-  }
-  .price-value {
-    font-size: 24px;
-  }
+  .card-content { padding: 24px; }
+  .card-title { font-size: 20px; }
+  .price-val { font-size: 32px; }
 }
 </style>
