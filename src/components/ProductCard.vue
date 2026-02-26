@@ -67,10 +67,10 @@ const formatPrice = (price?: number, unit?: string) => {
 <style scoped>
 .product-card {
   background: var(--color-white);
-  border-radius: var(--radius-xl);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-light);
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -78,16 +78,16 @@ const formatPrice = (price?: number, unit?: string) => {
 }
 
 .product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-  border-color: rgba(255, 107, 53, 0.1);
+  transform: translateY(-12px);
+  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.12);
+  border-color: rgba(255, 107, 53, 0.2);
 }
 
 .card-image {
   position: relative;
-  aspect-ratio: 4/3;
+  aspect-ratio: 16/10;
   overflow: hidden;
-  background: #fdfcfb;
+  background: var(--color-bg-secondary);
 }
 
 .image-wrapper {
@@ -99,11 +99,11 @@ const formatPrice = (price?: number, unit?: string) => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s ease;
+  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .product-card:hover .image-wrapper img {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 .image-placeholder {
@@ -112,7 +112,17 @@ const formatPrice = (price?: number, unit?: string) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #fff5f2 0%, #fffbf0 100%);
+  background: var(--gradient-surface);
+  position: relative;
+}
+
+.image-placeholder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--color-primary) 0.5px, transparent 0.5px);
+  background-size: 15px 15px;
+  opacity: 0.05;
 }
 
 .placeholder-content {
@@ -120,131 +130,143 @@ const formatPrice = (price?: number, unit?: string) => {
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-sm);
-  opacity: 0.6;
+  z-index: 1;
 }
 
 .placeholder-icon {
-  font-size: 48px;
-  filter: grayscale(0.2);
+  font-size: 56px;
+  filter: drop-shadow(0 10px 15px rgba(255, 107, 53, 0.2));
 }
 
 .placeholder-text {
-  font-size: var(--font-size-xs);
+  font-size: 11px;
   color: var(--color-primary);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: 1px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .card-badge {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(4px);
-  color: var(--color-primary);
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
+  top: 16px;
+  right: 16px;
+  background: var(--color-tech-navy);
+  color: var(--color-white);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
   font-size: 11px;
-  font-weight: var(--font-weight-bold);
-  box-shadow: var(--shadow-sm);
+  font-weight: 700;
+  letter-spacing: 1px;
   z-index: 1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
 }
 
 .card-content {
-  padding: var(--spacing-lg);
+  padding: 28px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  position: relative;
 }
 
 .card-header-info {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: var(--spacing-xs);
-  gap: var(--spacing-sm);
+  margin-bottom: 12px;
+  gap: 16px;
 }
 
 .card-title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  line-height: 1.3;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-tech-navy);
+  line-height: 1.2;
   flex-grow: 1;
+  letter-spacing: -0.5px;
 }
 
 .card-category {
   font-size: 11px;
+  font-weight: 700;
   color: var(--color-text-muted);
   background: var(--color-bg-secondary);
-  padding: 2px 8px;
-  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  border-radius: 4px;
   white-space: nowrap;
+  letter-spacing: 0.5px;
 }
 
 .card-desc {
-  font-size: var(--font-size-sm);
+  font-size: 15px;
   color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: 32px;
   line-height: 1.6;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  height: 3.2em; /* Ensure consistent spacing */
+  height: 3.2em;
 }
 
 .card-action-area {
   margin-top: auto;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-bg-secondary);
 }
 
 .card-price {
   color: var(--color-primary);
   display: flex;
   align-items: baseline;
-  gap: 2px;
 }
 
 .price-symbol {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
+  font-size: 14px;
+  font-weight: 700;
+  margin-right: 2px;
 }
 
 .price-value {
-  font-size: var(--font-size-2xl);
+  font-size: 32px;
   font-weight: 800;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1;
 }
 
 .price-unit {
-  font-size: var(--font-size-xs);
+  font-size: 13px;
   color: var(--color-text-muted);
-  margin-left: 2px;
+  margin-left: 4px;
+  font-weight: 500;
 }
 
 .card-price-placeholder {
-  font-size: var(--font-size-base);
+  font-size: 15px;
   color: var(--color-text-muted);
-  font-weight: var(--font-weight-medium);
+  font-weight: 600;
 }
 
 .card-tags {
   display: flex;
-  gap: var(--spacing-xs);
+  gap: 8px;
 }
 
 .tag-pill {
-  padding: 4px 10px;
-  font-size: 10px;
-  font-weight: var(--font-weight-bold);
-  border-radius: var(--radius-md);
-  background: #f0f2f5;
-  color: #5f6368;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 4px;
+  background: var(--color-bg-secondary);
+  color: var(--color-tech-navy);
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.product-card:hover .tag-pill {
+  border-color: var(--color-border);
 }
 
 .tag-accent {
@@ -254,10 +276,13 @@ const formatPrice = (price?: number, unit?: string) => {
 
 @media (max-width: 640px) {
   .card-content {
-    padding: var(--spacing-md);
+    padding: 20px;
+  }
+  .card-title {
+    font-size: 18px;
   }
   .price-value {
-    font-size: var(--font-size-xl);
+    font-size: 24px;
   }
 }
 </style>

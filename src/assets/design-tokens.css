@@ -12,6 +12,17 @@
   --color-primary-dark: #E55A2B;
   --color-primary-bg: rgba(255, 107, 53, 0.08);
 
+  /* 科技感对比色 */
+  --color-tech-navy: #0F172A;
+  --color-tech-blue: #3B82F6;
+  --color-tech-purple: #8B5CF6;
+
+  /* 渐变系统 */
+  --gradient-primary: linear-gradient(135deg, #FF6B35 0%, #FF8F66 100%);
+  --gradient-tech: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+  --gradient-surface: linear-gradient(180deg, #FFFFFF 0%, #F9FAFB 100%);
+  --gradient-accent: linear-gradient(135deg, #FF6B35 0%, #8B5CF6 100%);
+
   /* 辅助色 */
   --color-secondary: #6C584C;      /* 猫咪棕 - 用于图标、点缀 */
   --color-secondary-light: #A98467;
