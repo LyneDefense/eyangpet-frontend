@@ -55,36 +55,36 @@ onMounted(() => {
     <div class="container">
       <!-- 页面标题 -->
       <header class="page-header">
-        <div class="header-bg-blobs">
-          <div class="blob-1"></div>
-          <div class="blob-2"></div>
-          <div class="blob-3"></div>
+        <div class="header-lines">
+          <div class="line-h"></div>
+          <div class="line-v"></div>
         </div>
         <div class="header-content">
-          <div class="header-pre-title">
-            <span class="pulse-dot"></span>
-            E-Pet Premium Collection
+          <div class="header-meta">
+            <span class="meta-tag">01 // PREMIUM</span>
+            <span class="meta-divider"></span>
+            <span class="meta-tag">ACTIVE_SERVICES</span>
           </div>
           <h1 class="main-page-title">
-            <span class="text-outline">配件</span>与精品
+            配件与精品
           </h1>
-          <p class="main-page-description">匠心打造高品质爱宠生活，让每一位毛孩子都能享受到科技赋能的温馨呵护。</p>
-          <div class="header-stats-row">
-            <div class="stat-item">
-              <span class="stat-val">{{ filteredProducts.length }}</span>
-              <span class="stat-lbl">ITEMS FOUND</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-              <span class="stat-val">{{ categories.length }}</span>
-              <span class="stat-lbl">CATEGORIES</span>
-            </div>
-          </div>
+          <p class="main-page-description">
+            匠心打造高品质爱宠生活，让每一位毛孩子都能享受到科技赋能的温馨呵护。
+          </p>
         </div>
-        <div class="header-illustration">
-          <div class="cat-scanner-effect">
-            <span class="cat-symbol">🐱</span>
-            <div class="scanner-line"></div>
+        <div class="header-aside">
+          <div class="stats-card">
+            <div class="stats-header">SYSTEM_STATS</div>
+            <div class="stats-row">
+              <div class="stats-item">
+                <span class="stats-label">COUNT</span>
+                <span class="stats-value">{{ filteredProducts.length }}</span>
+              </div>
+              <div class="stats-item">
+                <span class="stats-label">TYPE</span>
+                <span class="stats-value">{{ categories.length }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </header>
@@ -137,222 +137,203 @@ onMounted(() => {
 <style scoped>
 .products-page {
   min-height: 100vh;
-  background-color: #fff;
-  padding: 120px 0;
+  background-color: var(--color-white);
+  padding: 140px 0;
   position: relative;
   overflow-x: hidden;
   font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
 }
 
 .products-page::before {
   content: "";
-  position: fixed;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(255, 107, 53, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.03) 0%, transparent 40%);
-  z-index: 0;
-  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--color-border);
+  z-index: 10;
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 100px;
+  align-items: flex-end;
+  margin-bottom: 120px;
   position: relative;
-  min-height: 400px;
-  z-index: 1;
 }
 
-.header-bg-blobs {
+.header-lines {
   position: absolute;
-  inset: 0;
-  overflow: visible;
+  top: -140px;
+  left: 0;
+  width: 100%;
+  height: 400px;
+  pointer-events: none;
   z-index: -1;
 }
 
-.blob-1, .blob-2, .blob-3 {
+.line-h {
   position: absolute;
-  filter: blur(80px);
-  border-radius: 50%;
-  opacity: 0.2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, var(--color-border), transparent);
 }
 
-.blob-1 { width: 300px; height: 300px; background: var(--color-primary); top: -100px; left: -100px; }
-.blob-2 { width: 400px; height: 400px; background: var(--color-tech-blue); bottom: -100px; right: -50px; }
-.blob-3 { width: 200px; height: 200px; background: var(--color-tech-purple); top: 50%; left: 30%; }
+.line-v {
+  position: absolute;
+  top: -140px;
+  left: 10%;
+  width: 1px;
+  height: 600px;
+  background: linear-gradient(to bottom, var(--color-border), transparent);
+}
 
 .header-content {
-  max-width: 680px;
+  max-width: 720px;
 }
 
-.header-pre-title {
+.header-meta {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 4px;
-  color: var(--color-primary);
-  text-transform: uppercase;
-  margin-bottom: 24px;
+  gap: 16px;
+  margin-bottom: 32px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--color-text-muted);
 }
 
-.pulse-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--color-primary);
-  border-radius: 50%;
-  position: relative;
-}
-
-.pulse-dot::after {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border: 1px solid var(--color-primary);
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(3); opacity: 0; }
+.meta-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--color-border);
 }
 
 .main-page-title {
-  font-size: 96px;
+  font-size: 110px;
   font-weight: 900;
-  line-height: 1;
-  color: var(--color-tech-navy);
-  margin-bottom: 32px;
-  letter-spacing: -4px;
-}
-
-.text-outline {
-  -webkit-text-stroke: 2px var(--color-tech-navy);
-  color: transparent;
+  line-height: 0.9;
+  color: var(--color-text-primary);
+  margin-bottom: 40px;
+  letter-spacing: -6px;
+  text-transform: uppercase;
 }
 
 .main-page-description {
-  font-size: 22px;
+  font-size: 18px;
   color: var(--color-text-secondary);
   line-height: 1.6;
-  max-width: 560px;
-  margin-bottom: 48px;
+  max-width: 480px;
   font-weight: 500;
+  border-left: 2px solid var(--color-text-primary);
+  padding-left: 32px;
 }
 
-.header-stats-row {
+.header-aside {
+  width: 280px;
+}
+
+.stats-card {
+  padding: 32px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.stats-header {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--color-text-muted);
+  margin-bottom: 24px;
+}
+
+.stats-row {
   display: flex;
-  align-items: center;
   gap: 40px;
 }
 
-.stat-item {
+.stats-item {
   display: flex;
   flex-direction: column;
 }
 
-.stat-val {
-  font-size: 32px;
-  font-weight: 900;
-  color: var(--color-tech-navy);
-  line-height: 1;
-}
-
-.stat-lbl {
-  font-size: 12px;
+.stats-label {
+  font-size: 10px;
   font-weight: 800;
   color: var(--color-text-muted);
-  letter-spacing: 2px;
-  margin-top: 4px;
+  margin-bottom: 4px;
 }
 
-.stat-divider {
-  width: 1px;
-  height: 40px;
-  background: var(--color-border);
+.stats-value {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
 }
 
-.header-illustration {
-  position: relative;
-}
-
-.cat-scanner-effect {
-  position: relative;
-  font-size: 200px;
-  filter: drop-shadow(0 30px 50px rgba(15, 23, 42, 0.1));
-}
-
-.scanner-line {
-  position: absolute;
-  top: 0;
-  left: -20px;
-  right: -20px;
-  height: 4px;
-  background: var(--gradient-primary);
-  box-shadow: 0 0 20px var(--color-primary);
-  z-index: 2;
-  animation: scan 3s infinite ease-in-out;
-}
-
-@keyframes scan {
-  0%, 100% { top: 10%; }
-  50% { top: 90%; }
-}
-
-/* 分类导航 */
+/* 分类导航 - 结构化设计 */
 .category-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 64px;
-  padding: 24px;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--glass-shadow);
-  z-index: 2;
-  position: relative;
+  margin-bottom: 80px;
+  border-top: 1px solid var(--color-text-primary);
+  padding-top: 32px;
 }
 
 .filter-group {
   display: flex;
-  gap: 12px;
+  gap: 48px;
 }
 
 .filter-btn {
-  padding: 12px 28px;
-  border-radius: var(--radius-lg);
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--color-text-secondary);
-  background: transparent;
-  border: 1px solid transparent;
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 8px 0;
+  position: relative;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
 }
 
 .filter-btn:hover {
-  background: var(--color-bg-secondary);
-  color: var(--color-tech-navy);
+  color: var(--color-text-primary);
+}
+
+.filter-btn::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-text-primary);
+  transition: width 0.3s ease;
 }
 
 .filter-btn.active {
-  background: var(--color-tech-navy);
-  color: #fff;
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
+  color: var(--color-text-primary);
+}
+
+.filter-btn.active::after {
+  width: 100%;
 }
 
 /* 商品网格 */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 48px;
-  z-index: 1;
-  position: relative;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 1px;
+  background: var(--color-border);
+  border: 1px solid var(--color-border);
 }
 
 /* 状态提示 */
@@ -362,46 +343,37 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 160px 0;
+  padding: 200px 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: var(--color-text-muted);
 }
 
 .loading-spinner {
-  width: 80px;
-  height: 80px;
-  border: 4px solid var(--color-bg-secondary);
-  border-top-color: var(--color-primary);
-  border-radius: 50%;
-  animation: spin 1s infinite linear;
+  width: 2px;
+  height: 60px;
+  background: var(--color-text-primary);
+  animation: loading-line 1.5s infinite ease-in-out;
   margin-bottom: 40px;
+}
+
+@keyframes loading-line {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  50.1% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
 }
 
 @media (max-width: 1200px) {
   .main-page-title { font-size: 80px; }
-  .cat-scanner-effect { font-size: 160px; }
-}
-
-@media (max-width: 991px) {
-  .page-header { flex-direction: column; text-align: center; }
-  .header-content { max-width: 100%; margin-bottom: 60px; }
-  .header-stats-row { justify-content: center; }
-  .main-page-title { font-size: 64px; letter-spacing: -2px; }
-  .main-page-description { max-width: 100%; margin: 0 auto 40px; }
+  .header-aside { display: none; }
 }
 
 @media (max-width: 768px) {
-  .products-page { padding: 80px 0; }
-  .main-page-title { font-size: 48px; }
-  .category-nav {
-    flex-direction: column;
-    gap: 24px;
-  }
-  .filter-group {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .products-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 32px;
-  }
+  .products-page { padding: 100px 0; }
+  .main-page-title { font-size: 60px; letter-spacing: -3px; }
+  .filter-group { gap: 24px; flex-wrap: wrap; }
+  .products-grid { grid-template-columns: 1fr; }
 }
 </style>

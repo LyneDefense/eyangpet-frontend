@@ -13,15 +13,15 @@
   --color-primary-bg: rgba(255, 107, 53, 0.08);
 
   /* 科技感对比色 */
-  --color-tech-navy: #0F172A;
-  --color-tech-blue: #3B82F6;
-  --color-tech-purple: #8B5CF6;
+  --color-tech-navy: #020617;
+  --color-tech-blue: #000000;
+  --color-tech-purple: #1E293B;
 
-  /* 渐变系统 */
-  --gradient-primary: linear-gradient(135deg, #FF6B35 0%, #FF8F66 100%);
-  --gradient-tech: linear-gradient(135deg, #0F172A 0%, #334155 100%);
-  --gradient-surface: linear-gradient(180deg, #FFFFFF 0%, #F9FAFB 100%);
-  --gradient-accent: linear-gradient(135deg, #FF6B35 0%, #8B5CF6 100%);
+  /* 渐变系统 - 极简灰度渐变 */
+  --gradient-primary: linear-gradient(to right, #000000, #475569);
+  --gradient-tech: linear-gradient(135deg, #020617 0%, #1E293B 100%);
+  --gradient-surface: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+  --gradient-accent: linear-gradient(to right, #000000, #0F172A);
 
   /* 辅助色 */
   --color-secondary: #6C584C;      /* 猫咪棕 - 用于图标、点缀 */
@@ -33,32 +33,26 @@
   --color-error: #EF4444;
   --color-info: #3B82F6;
 
-  /* 中性色 - 白色为主 */
+  /* 中性色 - 高级极简白 */
   --color-white: #FFFFFF;
-  --color-bg: #FFFFFF;              /* 主背景：纯白 */
-  --color-bg-secondary: #F9FAFB;    /* 次级背景：极浅灰 */
-  --color-bg-tertiary: #F3F4F6;     /* 第三级背景 */
-  --color-border: #E5E7EB;
-  --color-border-light: #F3F4F6;
+  --color-bg: #FFFFFF;
+  --color-bg-secondary: #F8FAFC;
+  --color-bg-tertiary: #F1F5F9;
+  --color-border: #E2E8F0;
+  --color-border-light: #F1F5F9;
 
-  /* 文字色 */
-  --color-text-primary: #0F172A;
+  /* 文字色 - 高对比 */
+  --color-text-primary: #020617;
   --color-text-secondary: #475569;
   --color-text-muted: #94A3B8;
   --color-text-inverse: #FFFFFF;
 
-  /* ============ 字体系统 ============ */
+  /* ============ 字体系统 - 极简科技 ============ */
 
-  --font-family: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
-                 "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
-  /* 玻璃拟态系统 */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.5);
-  --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.08);
-  --glass-blur: blur(12px);
-
-  /* 字号 */
+  /* 字号 - 黄金比例 */
   --font-size-xs: 12px;
   --font-size-sm: 14px;
   --font-size-base: 15px;

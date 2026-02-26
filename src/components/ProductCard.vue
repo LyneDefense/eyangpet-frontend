@@ -21,102 +21,60 @@ const formatPrice = (price?: number, unit?: string) => {
 
 <template>
   <div class="product-card">
-    <div class="card-tech-id">REF:{{ product.id.toString().padStart(4, '0') }}</div>
     <div class="card-image">
       <div v-if="product.images && product.images.length > 0" class="image-wrapper">
         <img :src="product.images[0]" :alt="product.name" />
       </div>
       <div v-else class="image-placeholder">
-        <div class="placeholder-content">
-          <span class="placeholder-icon">🐱</span>
-          <span class="placeholder-text">SYSTEM ACTIVE</span>
-        </div>
+        <div class="placeholder-text">NO_IMAGE_DATA</div>
       </div>
-      <div class="card-badge" v-if="product.isActive">AVAILABLE</div>
+      <div class="card-id-tag">#{{ product.id.toString().padStart(3, '0') }}</div>
     </div>
-    <div class="card-content">
-      <div class="card-header-info">
-        <div class="category-pill" v-if="product.categoryName">{{ product.categoryName }}</div>
-        <h3 class="card-title">{{ product.name }}</h3>
+    <div class="card-body">
+      <div class="card-header">
+        <div class="product-category" v-if="product.categoryName">{{ product.categoryName }}</div>
+        <h3 class="product-title">{{ product.name }}</h3>
       </div>
-      <p v-if="product.description" class="card-desc">
+      <p v-if="product.description" class="product-description">
         {{ product.description }}
       </p>
       <div class="card-footer">
-        <div v-if="formatPrice(product.price, product.priceUnit)" class="card-price-row">
-          <span class="price-val">{{ product.price }}</span>
-          <span class="price-cur">RMB</span>
-          <span class="price-unt" v-if="product.priceUnit">/{{ product.priceUnit }}</span>
+        <div class="price-section">
+          <div v-if="formatPrice(product.price, product.priceUnit)" class="price-display">
+            <span class="price-amount">{{ product.price }}</span>
+            <span class="price-unit">{{ product.priceUnit ? ' / ' + product.priceUnit : '' }}</span>
+          </div>
+          <div v-else class="price-inquiry">REQUEST_QUOTE</div>
         </div>
-        <div v-else class="price-placeholder">CONTACT SERVICE</div>
-
-        <div class="card-tags" v-if="product.tags && product.tags.length > 0">
-          <span
-            v-for="tag in product.tags.slice(0, 1)"
-            :key="tag"
-            class="tag-tech"
-            :class="{ 'tag-highlight': tag === 'meituan' }"
-          >
-            {{ getTagLabel(tag) }}
-          </span>
+        <div class="action-tag" v-if="product.tags && product.tags.length > 0">
+          {{ getTagLabel(product.tags[0]) }}
         </div>
       </div>
     </div>
-    <div class="card-hover-border"></div>
   </div>
 </template>
 
 <style scoped>
 .product-card {
-  background: #fff;
-  border-radius: var(--radius-xl);
-  border: 1px solid var(--color-border);
-  overflow: hidden;
-  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  background: var(--color-white);
   display: flex;
   flex-direction: column;
-  position: relative;
   height: 100%;
-  cursor: pointer;
-}
-
-.card-tech-id {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  font-size: 10px;
-  font-family: monospace;
-  color: var(--color-text-muted);
-  z-index: 2;
-  letter-spacing: 1px;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  border: 1px solid transparent;
+  padding: 32px;
 }
 
 .product-card:hover {
-  transform: translateY(-16px) scale(1.02);
-  box-shadow: 0 40px 80px rgba(15, 23, 42, 0.15);
-  border-color: transparent;
-}
-
-.card-hover-border {
-  position: absolute;
-  inset: 0;
-  border: 2px solid transparent;
-  border-radius: var(--radius-xl);
-  pointer-events: none;
-  transition: all 0.6s ease;
-  z-index: 5;
-}
-
-.product-card:hover .card-hover-border {
-  border-color: var(--color-primary);
-  mask-image: linear-gradient(135deg, black, transparent);
+  background: var(--color-bg-secondary);
 }
 
 .card-image {
   position: relative;
   aspect-ratio: 1/1;
   overflow: hidden;
-  background: var(--color-bg-secondary);
+  background: var(--color-bg-tertiary);
+  margin-bottom: 32px;
 }
 
 .image-wrapper {
@@ -128,11 +86,12 @@ const formatPrice = (price?: number, unit?: string) => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+  filter: grayscale(1);
+  transition: filter 0.6s ease;
 }
 
-.product-card:hover .image-wrapper img {
-  transform: scale(1.15);
+.product-card:hover img {
+  filter: grayscale(0);
 }
 
 .image-placeholder {
@@ -141,69 +100,57 @@ const formatPrice = (price?: number, unit?: string) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--gradient-surface);
-}
-
-.placeholder-icon {
-  font-size: 64px;
-  filter: grayscale(1);
-  opacity: 0.2;
 }
 
 .placeholder-text {
-  position: absolute;
-  bottom: 20px;
+  font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 900;
   letter-spacing: 2px;
   color: var(--color-text-muted);
 }
 
-.card-badge {
+.card-id-tag {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
-  background: var(--color-tech-navy);
-  color: #fff;
-  padding: 6px 12px;
+  top: 16px;
+  left: 16px;
+  font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  z-index: 2;
+  color: var(--color-text-muted);
+  background: var(--color-white);
+  padding: 4px 8px;
 }
 
-.card-content {
-  padding: 32px;
+.card-body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-.card-header-info {
-  margin-bottom: 20px;
+.card-header {
+  margin-bottom: 24px;
 }
 
-.category-pill {
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--color-primary);
+.product-category {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--color-text-muted);
   text-transform: uppercase;
-  letter-spacing: 1px;
   margin-bottom: 8px;
 }
 
-.card-title {
-  font-size: 24px;
+.product-title {
+  font-size: 28px;
   font-weight: 900;
-  color: var(--color-tech-navy);
-  line-height: 1.2;
+  line-height: 1.1;
+  color: var(--color-text-primary);
   letter-spacing: -1px;
 }
 
-.card-desc {
-  font-size: 15px;
-  color: var(--color-text-secondary);
+.product-description {
+  font-size: 14px;
   line-height: 1.6;
+  color: var(--color-text-secondary);
   margin-bottom: 40px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -215,64 +162,49 @@ const formatPrice = (price?: number, unit?: string) => {
 .card-footer {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   padding-top: 24px;
-  border-top: 1px solid var(--color-border-light);
+  border-top: 1px solid var(--color-border);
 }
 
-.card-price-row {
+.price-display {
   display: flex;
   align-items: baseline;
 }
 
-.price-val {
-  font-size: 40px;
+.price-amount {
+  font-size: 32px;
   font-weight: 900;
-  color: var(--color-tech-navy);
-  line-height: 1;
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
 }
 
-.price-cur {
+.price-unit {
   font-size: 12px;
-  font-weight: 800;
   color: var(--color-text-muted);
   margin-left: 8px;
-}
-
-.price-unt {
-  font-size: 14px;
-  color: var(--color-text-muted);
-  margin-left: 4px;
-}
-
-.price-placeholder {
-  font-size: 14px;
   font-weight: 700;
+}
+
+.price-inquiry {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
   color: var(--color-text-muted);
 }
 
-.card-tags {
-  display: flex;
-}
-
-.tag-tech {
+.action-tag {
   font-size: 10px;
-  font-weight: 800;
-  color: var(--color-tech-navy);
-  padding: 6px 14px;
-  background: var(--color-bg-secondary);
-  border-radius: 4px;
-  letter-spacing: 0.5px;
-}
-
-.tag-highlight {
-  background: var(--color-primary-bg);
-  color: var(--color-primary);
+  font-weight: 900;
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border: 1px solid var(--color-text-primary);
+  padding: 6px 12px;
 }
 
 @media (max-width: 640px) {
-  .card-content { padding: 24px; }
-  .card-title { font-size: 20px; }
-  .price-val { font-size: 32px; }
+  .product-card { padding: 24px; }
+  .product-title { font-size: 24px; }
 }
 </style>
