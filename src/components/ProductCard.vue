@@ -156,7 +156,7 @@ const formatPrice = (price?: number, unit?: string) => {
   font-weight: 800;
   letter-spacing: 0.1em;
   z-index: 2;
-  box-shadow: 0 4px 12px rgba(0, 85, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .hover-indicator {
@@ -204,7 +204,7 @@ const formatPrice = (price?: number, unit?: string) => {
   margin-bottom: 12px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  border: 1px solid rgba(0, 85, 255, 0.1);
+  border: 1px solid var(--color-border-strong);
 }
 
 .product-name {

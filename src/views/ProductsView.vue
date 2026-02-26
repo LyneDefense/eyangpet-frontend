@@ -164,7 +164,7 @@ onMounted(() => {
 .orb-1 {
   width: 500px;
   height: 500px;
-  background: var(--color-primary);
+  background: var(--color-border-strong);
   top: -200px;
   right: -100px;
 }
@@ -172,7 +172,7 @@ onMounted(() => {
 .orb-2 {
   width: 400px;
   height: 400px;
-  background: var(--color-secondary);
+  background: var(--color-primary-bg);
   top: 20%;
   left: -150px;
 }
@@ -216,7 +216,7 @@ onMounted(() => {
   background: var(--color-primary-bg);
   border-radius: 100px;
   margin-bottom: 20px;
-  border: 1px solid rgba(0, 85, 255, 0.1);
+  border: 1px solid var(--color-border-strong);
 }
 
 .pill-dot {
@@ -331,7 +331,7 @@ onMounted(() => {
   width: 100%;
   height: 2px;
   background: var(--color-primary);
-  box-shadow: 0 0 10px rgba(0, 85, 255, 0.3);
+  box-shadow: 0 0 10px rgba(24, 24, 27, 0.2);
 }
 
 /* 内容区域 */

@@ -6,28 +6,28 @@
 :root {
   /* ============ 颜色系统 ============ */
 
-  /* 品牌色 - Builder Blue 风格 */
-  --color-primary: #0055FF;
-  --color-primary-hover: #0044CC;
-  --color-primary-bg: rgba(0, 85, 255, 0.04);
-  --color-secondary: #6366F1; /* Indigo accent for richness */
+  /* 品牌色 - 极简中性风格 (无蓝紫) */
+  --color-primary: #18181B; /* 深色 Zinc 用于强调 */
+  --color-primary-hover: #3F3F46;
+  --color-primary-bg: #F4F4F5; /* 浅色 Zinc */
+  --color-secondary: #A1A1AA; /* 中性灰用于丰富层次 */
 
-  /* 中性色 - 专业灰阶 */
-  --color-black: #0F172A; /* Deeper slate for contrast */
+  /* 中性色 - 高级极简灰阶 */
+  --color-black: #09090B;
   --color-white: #FFFFFF;
   --color-bg: #FFFFFF;
-  --color-bg-subtle: #F8FAFC; /* Softer gray background */
-  --color-border: #F1F5F9; /* Very light border */
-  --color-border-strong: #E2E8F0;
+  --color-bg-subtle: #FAFAFA;
+  --color-border: #F4F4F5;
+  --color-border-strong: #E4E4E7;
 
-  /* 渐变系统 */
-  --gradient-main: linear-gradient(135deg, #0055FF 0%, #6366F1 100%);
-  --gradient-bg: radial-gradient(circle at 50% 0%, rgba(0, 85, 255, 0.03) 0%, transparent 70%);
+  /* 渐变系统 - 中性灰度 */
+  --gradient-main: linear-gradient(135deg, #18181B 0%, #52525B 100%);
+  --gradient-bg: radial-gradient(circle at 50% 0%, rgba(24, 24, 27, 0.02) 0%, transparent 70%);
 
   /* 文字色 */
-  --color-text-primary: #0F172A;
-  --color-text-secondary: #475569;
-  --color-text-tertiary: #94A3B8;
+  --color-text-primary: #18181B;
+  --color-text-secondary: #52525B;
+  --color-text-tertiary: #A1A1AA;
 
   /* ============ 字体系统 ============ */
 
@@ -72,7 +72,7 @@
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --shadow-card: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.05), 0 12px 24px rgba(0, 0, 0, 0.05);
-  --shadow-card-hover: 0 0 0 1px rgba(0, 85, 255, 0.1), 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-card-hover: 0 0 0 1px rgba(24, 24, 27, 0.1), 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 
   /* ============ 动画 ============ */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
